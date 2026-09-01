@@ -137,6 +137,13 @@
     });
     client.requestAccessToken();
   }
-</script>
+</script> 
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-2 text-xs font-bold text-gray-700 shadow-md">
+  <button onclick="switchTab('calendar')" class="flex flex-col items-center">📅 التقويم</button>
+  <button onclick="switchTab('expenses')" class="flex flex-col items-center">💰 المصاريف</button>
+  <button onclick="switchTab('habits')" class="flex flex-col items-center">✅ الروتين</button>
+  <button onclick="switchTab('settings')" class="flex flex-col items-center">⚙️ السحاب</button>
+  </nav>
+  
 </body>
 </html>
