@@ -17,51 +17,58 @@
 
   <main class="p-4 max-w-md mx-auto space-y-6">
 
-    <section id="tab-calendar" class="tab-content bg-white p-4 rounded-xl shadow">
-      <h2 class="text-lg font-bold mb-3 text-indigo-600">📅 التقويم والمواعيد</h2>
-      <input type="text" id="event-title" placeholder="عنوان الموعد" class="w-full p-2 border rounded mb-2">
-      <input type="date" id="event-date" class="w-full p-2 border rounded mb-2">
-      <button onclick="addEvent()" class="w-full bg-indigo-600 text-white py-2 rounded font-bold">إضافة موعد</button>
+    <!-- قسم التقويم والمواعيد -->
+    <section id="tab-calendar" class="tab-content bg-white p-5 rounded-xl shadow-md space-y-3">
+      <h2 class="text-lg font-bold mb-2 text-indigo-600 flex items-center gap-2"><span>📅</span> التقويم والمواعيد</h2>
+      <input type="text" id="event-title" placeholder="عنوان الموعد" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      <input type="date" id="event-date" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      <button onclick="addEvent()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition">إضافة موعد</button>
       <ul id="events-list" class="mt-4 divide-y"></ul>
     </section>
 
-    <section id="tab-expenses" class="tab-content hidden bg-white p-4 rounded-xl shadow">
-      <h2 class="text-lg font-bold mb-3 text-green-600">💰 المصاريف</h2>
-      <input type="number" id="exp-amount" placeholder="المبلغ" class="w-full p-2 border rounded mb-2">
-      <input type="text" id="exp-desc" placeholder="الوصف (مثلاً: شراء فرض)" class="w-full p-2 border rounded mb-2">
-      <button onclick="addExpense()" class="w-full bg-green-600 text-white py-2 rounded font-bold">إضافة مصروف</button>
-      <div class="mt-4 font-bold text-gray-700">المجموع: <span id="total-exp">0</span></div>
+    <!-- قسم المصاريف -->
+    <section id="tab-expenses" class="tab-content hidden bg-white p-5 rounded-xl shadow-md space-y-3">
+      <h2 class="text-lg font-bold mb-2 text-green-600 flex items-center gap-2"><span>💰</span> المصاريف</h2>
+      <input type="number" id="exp-amount" placeholder="المبلغ (دج)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+      <input type="text" id="exp-desc" placeholder="الوصف (مثلاً: شراء غرض)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+      <button onclick="addExpense()" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition">إضافة مصروف</button>
+      <div class="mt-3 p-3 bg-green-50 rounded-lg flex justify-between items-center font-bold text-green-800">
+        <span>إجمالي المصاريف:</span>
+        <span id="total-exp">0</span> دج
+      </div>
       <ul id="expenses-list" class="mt-4 divide-y"></ul>
     </section>
 
-    <section id="tab-habits" class="tab-content hidden bg-white p-4 rounded-xl shadow">
-      <h2 class="text-lg font-bold mb-3 text-amber-600">✅ الروتين اليومي</h2>
-      <input type="text" id="habit-title" placeholder="عادة جديدة" class="w-full p-2 border rounded mb-2">
-      <button onclick="addHabit()" class="w-full bg-amber-600 text-white py-2 rounded font-bold">إضافة عادة</button>
+    <!-- قسم الروتين اليومي -->
+    <section id="tab-habits" class="tab-content hidden bg-white p-5 rounded-xl shadow-md space-y-3">
+      <h2 class="text-lg font-bold mb-2 text-amber-600 flex items-center gap-2"><span>✅</span> الروتين اليومي</h2>
+      <input type="text" id="habit-title" placeholder="اسم العادة أو الروتين" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+      <button onclick="addHabit()" class="w-full bg-amber-600 text-white py-3 rounded-lg font-bold hover:bg-amber-700 transition">إضافة عادة</button>
       <ul id="habits-list" class="mt-4 divide-y"></ul>
     </section>
 
-    <section id="tab-settings" class="tab-content hidden bg-white p-4 rounded-xl shadow">
-      <h2 class="text-lg font-bold mb-3 text-indigo-600">⚙️ السحاب (Google Drive)</h2>
-      <button onclick="handleGoogleLogin()" class="w-full bg-blue-600 text-white py-2 rounded font-bold mb-3">تسجيل الدخول بـ Google</button>
-      <button onclick="backupData()" class="w-full bg-emerald-600 text-white py-2 rounded font-bold mb-3">رفع نسخة احتياطية إلى Drive</button>
-      <button onclick="restoreData()" class="w-full bg-gray-600 text-white py-2 rounded font-bold">استرجاع البيانات من Drive</button>
+    <!-- قسم السحاب -->
+    <section id="tab-settings" class="tab-content hidden bg-white p-5 rounded-xl shadow-md space-y-3">
+      <h2 class="text-lg font-bold mb-2 text-blue-600 flex items-center gap-2"><span>⚙️</span> السحاب والنسخ الاحتياطي</h2>
+      <button onclick="handleGoogleLogin()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition">تسجيل الدخول بـ Google</button>
+      <button onclick="backupData()" class="w-full bg-emerald-600 text-white py-3 rounded-lg font-bold hover:bg-emerald-700 transition">رفع نسخة احتياطية إلى Drive</button>
+      <button onclick="restoreData()" class="w-full bg-gray-600 text-white py-3 rounded-lg font-bold hover:bg-gray-700 transition">استرجاع البيانات من Drive</button>
       <p id="sync-status" class="text-xs text-center text-gray-500 mt-3"></p>
     </section>
 
   </main>
 
+  <!-- شريط التنقل السفلي -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-3 text-xs font-bold text-gray-700 shadow-lg z-50">
-    <button onclick="switchTab('calendar')" id="btn-calendar" class="flex flex-col items-center text-indigo-600">
+    <button onclick="switchTab('calendar')" id="btn-calendar" class="flex flex-col items-center text-indigo-600 transition">
       <span class="text-xl mb-1">📅</span>التقويم
-    </button>
-    <button onclick="switchTab('expenses')" id="btn-expenses" class="flex flex-col items-center text-gray-600">
+    </button><button onclick="switchTab('expenses')" id="btn-expenses" class="flex flex-col items-center text-gray-400 hover:text-gray-700 transition">
       <span class="text-xl mb-1">💰</span>المصاريف
     </button>
-    <button onclick="switchTab('habits')" id="btn-habits" class="flex flex-col items-center text-gray-600">
+    <button onclick="switchTab('habits')" id="btn-habits" class="flex flex-col items-center text-gray-400 hover:text-gray-700 transition">
       <span class="text-xl mb-1">✅</span>الروتين
     </button>
-    <button onclick="switchTab('settings')" id="btn-settings" class="flex flex-col items-center text-gray-600">
+    <button onclick="switchTab('settings')" id="btn-settings" class="flex flex-col items-center text-gray-400 hover:text-gray-700 transition">
       <span class="text-xl mb-1">⚙️</span>السحاب
     </button>
   </nav>
@@ -71,16 +78,18 @@
 
     function switchTab(tabName) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('nav button').forEach(el => {
-        el.classList.remove('text-indigo-600');
-        el.classList.add('text-gray-650', 'text-gray-600');
+      ['calendar', 'expenses', 'habits', 'settings'].forEach(t => {
+        const btn = document.getElementById(`btn-${t}`);
+        if(btn) {
+          btn.className = "flex flex-col items-center text-gray-400 hover:text-gray-700 transition";
+        }
       });
 
       document.getElementById(`tab-${tabName}`).classList.remove('hidden');
       const activeBtn = document.getElementById(`btn-${tabName}`);
       if (activeBtn) {
-        activeBtn.classList.remove('text-gray-600');
-        activeBtn.classList.add('text-indigo-600');
+        const colors = { calendar: 'text-indigo-600', expenses: 'text-green-600', habits: 'text-amber-600', settings: 'text-blue-600' };
+        activeBtn.className = `flex flex-col items-center ${colors[tabName]} transition`;
       }
     }
 
@@ -90,17 +99,21 @@
 
     function renderAll() {
       const evlist = document.getElementById('events-list');
-      if (evlist) evlist.innerHTML = events.map(e => `<li class="py-2 flex justify-between"><span>${e.title}</span><span class="text-gray-500">${e.date}</span></li>`).join('');
+      if (evlist) {
+        evlist.innerHTML = events.length ? events.map((e, index) => `<li class="py-3 flex justify-between items-center"><div><span class="font-bold block">${e.title}</span><span class="text-xs text-gray-500">${e.date}</span></div><button onclick="deleteEvent(${index})" class="text-red-500 text-xs px-2 py-1 border border-red-200 rounded">حذف</button></li>`).join('') : '<p class="text-gray-400 text-center py-2 text-xs">لا توجد مواعيد مضافة</p>';
+      }
 
       const exlist = document.getElementById('expenses-list');
       if (exlist) {
-        exlist.innerHTML = expenses.map(ex => `<li class="py-2 flex justify-between"><span>${ex.desc}</span><span class="font-bold">${ex.amount} دج</span></li>`).join('');
+        exlist.innerHTML = expenses.length ? expenses.map((ex, index) => `<li class="py-3 flex justify-between items-center"><div><span class="block">${ex.desc}</span><span class="font-bold text-green-600">${ex.amount} دج</span></div><button onclick="deleteExpense(${index})" class="text-red-500 text-xs px-2 py-1 border border-red-200 rounded">حذف</button></li>`).join('') : '<p class="text-gray-400 text-center py-2 text-xs">لا توجد مصاريف مسجلة</p>';
         const total = expenses.reduce((sum, item) => sum + Number(item.amount), 0);
         document.getElementById('total-exp').innerText = total;
       }
 
       const hbList = document.getElementById('habits-list');
-      if (hbList) hbList.innerHTML = habits.map(h => `<li class="py-2 flex justify-between"><span>${h.title}</span><span class="text-green-600">✓</span></li>`).join('');
+      if (hbList) {
+        hbList.innerHTML = habits.length ? habits.map((h, index) => `<li class="py-3 flex justify-between items-center"><span class="font-medium">${h.title}</span><button onclick="deleteHabit(${index})" class="text-red-500 text-xs px-2 py-1 border border-red-200 rounded">حذف</button></li>`).join('') : '<p class="text-gray-400 text-center py-2 text-xs">لا توجد عادات مسجلة</p>';
+      }
     }
 
     function addEvent() {
@@ -137,6 +150,10 @@
       }
     }
 
+    function deleteEvent(i) { events.splice(i, 1); localStorage.setItem('my_events', JSON.stringify(events)); renderAll(); }
+    function deleteExpense(i) { expenses.splice(i, 1); localStorage.setItem('my_expenses', JSON.stringify(expenses)); renderAll(); }
+    function deleteHabit(i) { habits.splice(i, 1); localStorage.setItem('my_habits', JSON.stringify(habits)); renderAll(); }
+
     renderAll();
 
     function handleGoogleLogin() {
@@ -162,5 +179,5 @@
     }
   </script>
 </body>
-      </html>
-        
+        </html>
+      
