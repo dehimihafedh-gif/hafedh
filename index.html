@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيقي الشخصي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800 pb-20">
+
+    <header class="bg-indigo-600 text-white p-4 text-center font-bold text-xl shadow-md">
+        منظمي الشخصي
+    </header>
+
+    <main class="p-4 max-w-md mx-auto">
+        
+        <section id="tab-calendar" class="tab-content bg-white p-4 rounded-xl shadow">
+            <h2 class="text-lg font-bold mb-3 text-indigo-600">📅 التقويم والمواعيد</h2>
+            <input type="text" id="event-title" placeholder="عنوان الموعد" class="w-full p-2 border rounded mb-2">
+            <input type="date" id="event-date" class="w-full p-2 border rounded mb-2">
+            <button onclick="addEvent()" class="w-full bg-indigo-600 text-white py-2 rounded font-bold">إضافة موعد</button>
+            <ul id="events-list" class="mt-4 divide-y"></ul>
+        </section>
+
+        <section id="tab-expenses" class="tab-content bg-white p-4 rounded-xl shadow hidden">
+            <h2 class="text-lg font-bold mb-3 text-green-600">💰 تتبع المصاريف</h2>
+            <input type="number" id="exp-amount" placeholder="المبلغ" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="exp-desc" placeholder="الوصف (مثلاً: شراء غرض)" class="w-full p-2 border rounded mb-2">
+            <button onclick="addExpense()" class="w-full bg-green-600 text-white py-2 rounded font-bold">تسجيل المبلغ</button>
+            <div class="mt-4 font-bold text-gray-700">المجموع: <span id="total-exp">0</span> د.ج</div>
+            <ul id="expenses-list" class="mt-4 divide-y"></ul>
+        </section>
+
+        <section id="tab-habits" class="tab-content bg-white p-4 rounded-xl shadow hidden">
+            <h2 class="text-lg font-bold mb-3 text-amber-600">✅ الروتين اليومي</h2>
+            <input type="text" id="habit-title" placeholder="عادة جديدة..." class="w-full p-2 border rounded mb-2">
+            <button onclick="addHabit()" class="w-full bg-amber-600 text-white py-2 rounded font-bold">إضافة عادة</button>
+            <ul id="habits-list" class="mt-4 space-y-2"></ul>
+        </section>
+
+        <section id="tab-settings" class="tab-content bg-white p-4 rounded-xl shadow hidden">
+            <h2 class="text-lg font-bold mb-3 text-gray-700">⚙️ النسخ الاحتياطي (Google Drive)</h2>
+            <button id="auth-btn" onclick="handleAuth()" class="w-full bg-blue-600 text-white py-2 rounded mb-3 font-bold">
+                تسجيل الدخول بـ Google
+            </button>
+            <button onclick="backupData()" class="w-full bg-emerald-600 text-white py-2 rounded mb-2 font-bold">
+                رفع نسخة احتياطية إلى Drive
+            </button>
+            <button onclick="restoreData()" class="w-full bg-gray-600 text-white py-2 rounded font-bold">
+                استرجاع البيانات من Drive
+            </button>
+            <p id="sync-status" class="text-xs text-center mt-3 text-gray-500"></p>
+        </section>
+
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-2 text-xs font-bold text-gray-600 z-50">
+        <button onclick="switchTab('calendar')" class="flex flex-col items-center">📅 التقويم</button>
+        <button onclick="switchTab('expenses')" class="flex flex-col items-center">💰 المصاريف</button>
+        <button onclick="switchTab('habits')" class="flex flex-col items-center">✅ الروتين</button>
+        <button onclick="switchTab('settings')" class="flex flex-col items-center">⚙️ السحاب</button>
+    </nav>
+
+    <script>
+        const CLIENT_ID = '358736924266-9vhit2t5filvuchg2h3u19pmb95brn59.apps.googleusercontent.com';
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+        }
+
+        let events = JSON.parse(localStorage.getItem('my_events') || '[]');
+        let expenses = JSON.parse(localStorage.getItem('my_expenses') || '[]');
+        let habits = JSON.parse(localStorage.getItem('my_habits') || '[]');
+
+        function renderAll() {
+            // قائمة المواعيد
+            const evList = document.getElementById('events-list');
+            evList.innerHTML = events.map(e => `<li class="py-2">${e.title} - <span class="text-xs text-gray-500">${e.date}</span></li>`).join('');
+            
+            // قائمة المصاريف
+            const exList = document.getElementById('expenses-list');
+            exList.innerHTML = expenses.map(e => `<li class="py-2 flex justify-between"><span>${e.desc}</span><span class="font-bold">${e.amount} د.ج</span></li>`).join('');
+            const total = expenses.reduce((sum, item) => sum + Number(item.amount), 0);
+            document.getElementById('total-exp').innerText = total;
+
+            // قائمة الروتين
+            const hbList = document.getElementById('habits-list');
+            hbList.innerHTML = habits.map(h => `<li class="p-2 bg-gray-50 rounded flex justify-between">${h.title}</li>`).join('');
+        }
+
+        function addEvent() {
+            const title = document.getElementById('event-title').value;
+            const date = document.getElementById('event-date').value;
+            if (title && date) {
+                events.push({ title, date });
+                localStorage.setItem('my_events', JSON.stringify(events));
+                renderAll();
+                document.getElementById('event-title').value = '';
+            }
+        }
+
+        function addExpense() {
+            const amount = document.getElementById('exp-amount').value;
+            const desc = document.getElementById('exp-desc').value;
+            if (amount && desc) {
+                expenses.push({ amount, desc });
+                localStorage.setItem('my_expenses', JSON.stringify(expenses));
+                renderAll();
+                document.getElementById('exp-amount').value = '';
+                document.getElementById('exp-desc').value = '';
+            }
+        }
+
+        function addHabit() {
+            const title = document.getElementById('habit-title').value;
+            if (title) {
+                habits.push({ title });
+                localStorage.setItem('my_habits', JSON.stringify(habits));
+                renderAll();
+                document.getElementById('habit-title').value = '';
+            }
+        }
+
+        renderAll();
+    </script>
+</body>
+              </html>
+  
