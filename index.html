@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تطبيقي الشخصي</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="bg-gray-100 font-sans text-gray-800 pb-20">
 
@@ -38,31 +38,26 @@
             <button onclick="addHabit()" class="w-full bg-amber-600 text-white py-2 rounded font-bold">إضافة عادة</button>
             <ul id="habits-list" class="mt-4 space-y-2"></ul>
         </section>
+   <section id="tab-settings" class="tab-content hidden bg-white p-4 rounded-xl shadow-md">
+    <h2 class="text-lg font-bold mb-3 text-indigo-600">⚙️ النسخ الاحتياطي (Google Drive)</h2>
+    
+    <button onclick="handleGoogleLogin()" class="w-full bg-blue-600 text-white py-2 rounded font-bold mb-2">
+      تسجيل الدخول بـ Google
+    </button>
+    
+    <button onclick="backupData()" class="w-full bg-emerald-600 text-white py-2 rounded mb-2">
+      رفع نسخة احتياطية إلى Drive
+    </button>
+    
+    <button onclick="restoreData()" class="w-full bg-gray-600 text-white py-2 rounded font-bold">
+      استرجاع البيانات من Drive
+    </button>
 
-        <section id="tab-settings" class="tab-content bg-white p-4 rounded-xl shadow hidden">
-            <h2 class="text-lg font-bold mb-3 text-gray-700">⚙️ النسخ الاحتياطي (Google Drive)</h2>
-            <button id="auth-btn" onclick="handleAuth()" class="w-full bg-blue-600 text-white py-2 rounded mb-3 font-bold">
-                تسجيل الدخول بـ Google
-            </button>
-            <button onclick="backupData()" class="w-full bg-emerald-600 text-white py-2 rounded mb-2 font-bold">
-                رفع نسخة احتياطية إلى Drive
-            </button>
-            <button onclick="restoreData()" class="w-full bg-gray-600 text-white py-2 rounded font-bold">
-                استرجاع البيانات من Drive
-            </button>
-            <p id="sync-status" class="text-xs text-center mt-3 text-gray-500"></p>
-        </section>
+    <p id="sync-status" class="text-xs text-center mt-3 text-gray-500"></p>
+  </section>
 
     </main>
-
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-2 text-xs font-bold text-gray-600 z-50">
-        <button onclick="switchTab('calendar')" class="flex flex-col items-center">📅 التقويم</button>
-        <button onclick="switchTab('expenses')" class="flex flex-col items-center">💰 المصاريف</button>
-        <button onclick="switchTab('habits')" class="flex flex-col items-center">✅ الروتين</button>
-        <button onclick="switchTab('settings')" class="flex flex-col items-center">⚙️ السحاب</button>
-    </nav>
-
-    <script>
+    
         const CLIENT_ID = '358736924266-9vhit2t5filvuchg2h3u19pmb95brn59.apps.googleusercontent.com';
 
         function switchTab(tabName) {
@@ -123,8 +118,23 @@
             }
         }
 
-        renderAll();
-    </script>
+        renderAll(); 
+    const CLIENT_ID = '358736924266-9vhit2t5filvuchg2h3u19pmb95brn59.apps.googleusercontent.com';
+
+function handleGoogleLogin() {
+  const client = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: 'https://www.googleapis.com/auth/drive.file',
+    callback: (tokenResponse) => {
+      if (tokenResponse.access_token) {
+        localStorage.setItem('gdrive_token', tokenResponse.access_token);
+        document.getElementById('sync-status').innerText = 'تم تسجيل الدخول بنجاح!';
+      }
+    },
+  });
+  client.requestAccessToken();
+}
+  </script>  
 </body>
               </html>
   
