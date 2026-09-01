@@ -57,70 +57,72 @@
   </section>
 
     </main>
-    
-        const CLIENT_ID = '358736924266-9vhit2t5filvuchg2h3u19pmb95brn59.apps.googleusercontent.com';
+      <p id="sync-status" class="text-xs text-center mt-3 text-gray-500"></p>
+</section>
 
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-        }
-
-        let events = JSON.parse(localStorage.getItem('my_events') || '[]');
-        let expenses = JSON.parse(localStorage.getItem('my_expenses') || '[]');
-        let habits = JSON.parse(localStorage.getItem('my_habits') || '[]');
-
-        function renderAll() {
-            // قائمة المواعيد
-            const evList = document.getElementById('events-list');
-            evList.innerHTML = events.map(e => `<li class="py-2">${e.title} - <span class="text-xs text-gray-500">${e.date}</span></li>`).join('');
-            
-            // قائمة المصاريف
-            const exList = document.getElementById('expenses-list');
-            exList.innerHTML = expenses.map(e => `<li class="py-2 flex justify-between"><span>${e.desc}</span><span class="font-bold">${e.amount} د.ج</span></li>`).join('');
-            const total = expenses.reduce((sum, item) => sum + Number(item.amount), 0);
-            document.getElementById('total-exp').innerText = total;
-
-            // قائمة الروتين
-            const hbList = document.getElementById('habits-list');
-            hbList.innerHTML = habits.map(h => `<li class="p-2 bg-gray-50 rounded flex justify-between">${h.title}</li>`).join('');
-        }
-
-        function addEvent() {
-            const title = document.getElementById('event-title').value;
-            const date = document.getElementById('event-date').value;
-            if (title && date) {
-                events.push({ title, date });
-                localStorage.setItem('my_events', JSON.stringify(events));
-                renderAll();
-                document.getElementById('event-title').value = '';
-            }
-        }
-
-        function addExpense() {
-            const amount = document.getElementById('exp-amount').value;
-            const desc = document.getElementById('exp-desc').value;
-            if (amount && desc) {
-                expenses.push({ amount, desc });
-                localStorage.setItem('my_expenses', JSON.stringify(expenses));
-                renderAll();
-                document.getElementById('exp-amount').value = '';
-                document.getElementById('exp-desc').value = '';
-            }
-        }
-
-        function addHabit() {
-            const title = document.getElementById('habit-title').value;
-            if (title) {
-                habits.push({ title });
-                localStorage.setItem('my_habits', JSON.stringify(habits));
-                renderAll();
-                document.getElementById('habit-title').value = '';
-            }
-        }
-
-        renderAll(); 
-   <script>
+</main>
+<script>
   const CLIENT_ID = '358736924266-9vhit2t5filvuchg2h3u19pmb95brn59.apps.googleusercontent.com';
+
+  function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+  }
+
+  let events = JSON.parse(localStorage.getItem('my_events')) || [];
+  let expenses = JSON.parse(localStorage.getItem('my_expenses')) || [];
+  let habits = JSON.parse(localStorage.getItem('my_habits')) || [];
+
+  function renderAll() {
+    const evList = document.getElementById('events-list');
+    if (evList) evList.innerHTML = events.map(e => `<li class="py-2">${e.title} - ${e.date}</li>`).join('');
+
+    const exList = document.getElementById('expenses-list');
+    if (exList) {
+      exList.innerHTML = expenses.map(e => `<li class="py-2 flex justify-between"><span>${e.desc}</span><span>${e.amount} دج</span></li>`).join('');
+      const total = expenses.reduce((sum, item) => sum + Number(item.amount), 0);
+      document.getElementById('total-exp').innerText = total;
+    }
+
+    const hbList = document.getElementById('habits-list');
+    if (hbList) hbList.innerHTML = habits.map(h => `<li class="p-2 bg-gray-50 rounded flex justify-between"><span>${h.title}</span></li>`).join('');
+  }
+
+  function addEvent() {
+    const title = document.getElementById('event-title').value;
+    const date = document.getElementById('event-date').value;
+    if (title && date) {
+      events.push({ title, date });
+      localStorage.setItem('my_events', JSON.stringify(events));
+      renderAll();
+      document.getElementById('event-title').value = '';
+      document.getElementById('event-date').value = '';
+    }
+  }
+
+  function addExpense() {
+    const amount = document.getElementById('exp-amount').value;
+    const desc = document.getElementById('exp-desc').value;
+    if (amount && desc) {
+      expenses.push({ amount, desc });
+      localStorage.setItem('my_expenses', JSON.stringify(expenses));
+      renderAll();
+      document.getElementById('exp-amount').value = '';
+      document.getElementById('exp-desc').value = '';
+    }
+  }
+
+  function addHabit() {
+    const title = document.getElementById('habit-title').value;
+    if (title) {
+      habits.push({ title });
+      localStorage.setItem('my_habits', JSON.stringify(habits));
+      renderAll();
+      document.getElementById('habit-title').value = '';
+    }
+  }
+
+  renderAll();
 
   function handleGoogleLogin() {
     const client = google.accounts.oauth2.initTokenClient({
@@ -138,4 +140,3 @@
 </script>
 </body>
 </html>
-  
