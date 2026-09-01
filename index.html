@@ -119,22 +119,23 @@
         }
 
         renderAll(); 
-    const CLIENT_ID = '358736924266-9vhit2t5filvuchg2h3u19pmb95brn59.apps.googleusercontent.com';
+   <script>
+  const CLIENT_ID = '358736924266-9vhit2t5filvuchg2h3u19pmb95brn59.apps.googleusercontent.com';
 
-function handleGoogleLogin() {
-  const client = google.accounts.oauth2.initTokenClient({
-    client_id: CLIENT_ID,
-    scope: 'https://www.googleapis.com/auth/drive.file',
-    callback: (tokenResponse) => {
-      if (tokenResponse.access_token) {
-        localStorage.setItem('gdrive_token', tokenResponse.access_token);
-        document.getElementById('sync-status').innerText = 'تم تسجيل الدخول بنجاح!';
-      }
-    },
-  });
-  client.requestAccessToken();
-}
-  </script>  
+  function handleGoogleLogin() {
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: 'https://www.googleapis.com/auth/drive.file',
+      callback: (tokenResponse) => {
+        if (tokenResponse.access_token) {
+          localStorage.setItem('gdrive_token', tokenResponse.access_token);
+          document.getElementById('sync-status').innerText = 'تم تسجيل الدخول بنجاح!';
+        }
+      },
+    });
+    client.requestAccessToken();
+  }
+</script>
 </body>
-              </html>
+</html>
   
