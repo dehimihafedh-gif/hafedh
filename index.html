@@ -14,27 +14,25 @@
 
   <!-- الترويسة العلوية الحديثة -->
   <header class="bg-white shadow-sm p-3 sticky top-0 z-40 flex items-center justify-between border-b">
-    <div class="flex items-center gap-1.5">
-      <h1 class="text-xl font-black text-amber-700 tracking-wider flex items-center gap-1">
-        <span>🧠⚡</span> حافظ
-      </h1>
-    </div>
     <div class="flex items-center gap-2">
       <button onclick="openModal('backupModal')" class="bg-red-50 hover:bg-red-100 p-2 rounded-xl text-red-600 text-sm shadow-sm border border-red-100" title="نسخ احتياطي">💾</button>
       <button onclick="openModal('savedModal')" class="bg-amber-50 hover:bg-amber-100 p-2 rounded-xl text-amber-600 text-sm shadow-sm border border-amber-100" title="المحفوظات">🌶️</button>
       <button onclick="openModal('incomeModal')" class="bg-emerald-50 hover:bg-emerald-100 p-2 rounded-xl text-emerald-600 text-sm shadow-sm border border-emerald-100" title="الدخل">💰</button>
       <button onclick="openModal('prayerModal')" class="bg-sky-50 hover:bg-sky-100 p-2 rounded-xl text-sky-600 text-sm shadow-sm border border-sky-100" title="الصلاة">🕌</button>
     </div>
+    <div class="flex items-center gap-1.5">
+      <h1 class="text-xl font-black text-amber-700 tracking-wider flex items-center gap-1">
+        <span>🧠⚡</span> حافظ
+      </h1>
+    </div>
   </header>
 
-  <!-- شريط الفلترة والترتيب -->
+  <!-- شريط الفلترة والترتيب (نافذة منبثقة للترتيب) -->
   <div class="max-w-md mx-auto px-4 mt-3 flex justify-between items-center">
     <span id="archive-link" onclick="openModal('archiveModal')" class="text-xs text-gray-500 cursor-pointer bg-white px-3 py-1.5 rounded-xl shadow-sm border">📁 الأرشيف (0)</span>
-    <select id="sort-select" onchange="changeSort(this.value)" class="bg-white border text-xs px-3 py-1.5 rounded-xl shadow-sm text-gray-700 focus:outline-none">
-      <option value="manual">⚙️ ترتيب يدوي</option>
-      <option value="time">⏰ حسب التوقيت</option>
-      <option value="prio">⭐ حسب الأولوية</option>
-    </select>
+    <button onclick="openModal('sortModal')" id="current-sort-btn" class="bg-white border text-xs px-3 py-1.5 rounded-xl shadow-sm text-gray-700 font-bold flex items-center gap-1">
+      ⚙️ <span id="sort-label-text">يدوي</span>
+    </button>
   </div>
 
   <!-- قائمة المهام الرئيسية -->
@@ -47,6 +45,21 @@
     <button onclick="openModal('addModal')" class="pointer-events-auto bg-amber-600 hover:bg-amber-700 text-white font-bold px-8 py-3 rounded-full shadow-lg text-base flex items-center gap-2 transition-transform active:scale-95">
       <span>+ مهمة</span>
     </button>
+  </div>
+
+  <!-- ================= نافذة اختيار الترتيب ================= -->
+  <div id="sortModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-gray-800 text-lg">اختر طريقة الترتيب</h3>
+        <button onclick="closeModal('sortModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+      </div>
+      <div class="space-y-2">
+        <button onclick="setSortMode('manual', 'يدوي')" class="w-full text-right p-3 rounded-xl border hover:bg-amber-50 font-semibold text-sm flex items-center justify-between"><span>⚙️ ترتيب يدوي</span></button>
+        <button onclick="setSortMode('time', 'الوقت')" class="w-full text-right p-3 rounded-xl border hover:bg-amber-50 font-semibold text-sm flex items-center justify-between"><span>⏰ حسب التوقيت</span></button>
+        <button onclick="setSortMode('prio', 'الأولوية')" class="w-full text-right p-3 rounded-xl border hover:bg-amber-50 font-semibold text-sm flex items-center justify-between"><span>⭐ حسب الأولوية</span></button>
+      </div>
+    </div>
   </div>
 
   <!-- ================= نافذة إضافة مهمة ================= -->
@@ -94,16 +107,14 @@
     </div>
   </div>
 
-  <!-- ================= نافذة المحفوظات (تعديل ونقل للأرشيف) ================= -->
+  <!-- ================= نافذة المحفوظات ================= -->
   <div id="savedModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="font-bold text-amber-600 text-lg">المحفوظات 🌶️</h3>
         <button onclick="closeModal('savedModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
       </div>
-      <div class="space-y-3" id="saved-items-container">
-        <!-- تُعبأ ديناميكياً -->
-      </div>
+      <div class="space-y-3" id="saved-items-container"></div>
       <button onclick="closeModal('savedModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold">إغلاق</button>
     </div>
   </div>
@@ -115,9 +126,7 @@
         <h3 class="font-bold text-gray-700 text-lg">الأرشيف (المنجزة) 📁</h3>
         <button onclick="closeModal('archiveModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
       </div>
-      <div class="space-y-3" id="archive-items-container">
-        <!-- تُعبأ ديناميكياً -->
-      </div>
+      <div class="space-y-3" id="archive-items-container"></div>
       <button onclick="closeModal('archiveModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold">إغلاق</button>
     </div>
   </div>
@@ -194,7 +203,7 @@
     </div>
   </div>
 
-  <!-- ================= نافذة النسخ الاحتياطي (منسدلة الخيارات) ================= -->
+  <!-- ================= نافذة النسخ الاحتياطي ================= -->
   <div id="backupModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
@@ -214,6 +223,7 @@
 
   <script>
     let currentPriority = 'med';
+    let currentSortMode = 'manual';
     let items = JSON.parse(localStorage.getItem('hafedh_items')) || [
       { id: 1, name: 'كراء الشرقية', phone: '', amount: '1000', priority: 'low', date: '', notes: '', status: 'active' },
       { id: 2, name: 'كارت الشفاء عائلية', phone: '', amount: '0', priority: 'high', date: '', notes: '', status: 'active' },
@@ -224,8 +234,14 @@
     let finances = JSON.parse(localStorage.getItem('hafedh_finances')) || [];
     let prayers = JSON.parse(localStorage.getItem('hafedh_prayers')) || [];
 
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); renderAllSubViews(); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    function openModal(id) { 
+      document.getElementById(id).classList.remove('hidden'); 
+      renderAllSubViews(); 
+    }
+    
+    function closeModal(id) { 
+      document.getElementById(id).classList.add('hidden'); 
+    }
 
     function setPriority(prio) {
       currentPriority = prio;
@@ -269,6 +285,8 @@
         document.getElementById('inp-amount').value = '0';
         document.getElementById('inp-notes').value = '';
         document.getElementById('inp-date').value = '';
+      } else {
+        alert('الرجاء إدخال اسم المهمة');
       }
     }
 
@@ -285,7 +303,7 @@
       const container = document.getElementById('items-container');
       document.getElementById('archive-link').innerText = `📁 الأرشيف (${archive.length})`;
 
-      container.innerHTML = items.map((item, index) => {
+      container.innerHTML = items.length ? items.map((item, index) => {
         let borderColor = item.priority === 'high' ? 'border-r-red-500' : (item.priority === 'low' ? 'border-r-green-500' : 'border-r-blue-500');
         let dotColor = item.priority === 'high' ? 'bg-red-500' : (item.priority === 'low' ? 'bg-green-500' : 'bg-blue-500');
 
@@ -301,35 +319,4 @@
               ${item.notes ? `<p class="text-xs text-gray-400">${item.notes}</p>` : ''}
             </div>
             <div class="flex items-center gap-2">
-              ${item.phone ? `<a href="tel:${item.phone}" class="bg-gray-100 p-2 rounded-full text-gray-600 shadow-sm">📞</a>` : ''}
-              <button onclick="completeItem(${index})" class="bg-green-50 text-green-600 p-2 rounded-full border border-green-200 shadow-sm" title="إنجاز">✓</button>
-              <button onclick="moveToSaved(${index})" class="bg-amber-50 text-amber-600 p-2 rounded-full border border-amber-200 shadow-sm" title="نقل للمحفوظات">🌶️</button>
-              <button onclick="deleteActiveItem(${index})" class="bg-red-50 text-red-500 p-2 rounded-full border border-red-200 shadow-sm" title="حذف">🗑️</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function completeItem(index) {
-      const completed = items.splice(index, 1)[0];
-      archive.unshift(completed);
-      saveAndRender();
-    }
-
-    function moveToSaved(index) {
-      const sItem = items.splice(index, 1)[0];
-      saved.unshift(sItem);
-      saveAndRender();
-    }
-
-    function deleteActiveItem(index) {
-      items.splice(index, 1);
-      saveAndRender();
-    }
-
-    function renderAllSubViews() {
-      // الأرشيف
-      const arcContainer = document.getElementById('archive-items-container');
-      arcContainer.innerHTML = archive.length ? archive.map((item, i) => `
-        <div clas
+              ${item.phone ? `<a href="tel:${item.phone}" class="bg-gray-100 p-2 roun
