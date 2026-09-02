@@ -15,10 +15,10 @@
   <!-- الترويسة العلوية الحديثة -->
   <header class="bg-white shadow-sm p-3 sticky top-0 z-40 flex items-center justify-between border-b">
     <div class="flex items-center gap-2">
-      <button onclick="openModal('backupModal')" class="bg-red-50 hover:bg-red-100 p-2 rounded-xl text-red-600 text-sm shadow-sm border border-red-100" title="نسخ احتياطي">💾</button>
-      <button onclick="openModal('savedModal')" class="bg-amber-50 hover:bg-amber-100 p-2 rounded-xl text-amber-600 text-sm shadow-sm border border-amber-100" title="المحفوظات">🌶️</button>
-      <button onclick="openModal('incomeModal')" class="bg-emerald-50 hover:bg-emerald-100 p-2 rounded-xl text-emerald-600 text-sm shadow-sm border border-emerald-100" title="الدخل">💰</button>
-      <button onclick="openModal('prayerModal')" class="bg-sky-50 hover:bg-sky-100 p-2 rounded-xl text-sky-600 text-sm shadow-sm border border-sky-100" title="الصلاة">🕌</button>
+      <button type="button" onclick="openModal('backupModal')" class="bg-red-50 hover:bg-red-100 p-2 rounded-xl text-red-600 text-sm shadow-sm border border-red-100 cursor-pointer" title="نسخ احتياطي">💾</button>
+      <button type="button" onclick="openModal('savedModal')" class="bg-amber-50 hover:bg-amber-100 p-2 rounded-xl text-amber-600 text-sm shadow-sm border border-amber-100 cursor-pointer" title="المحفوظات">🌶️</button>
+      <button type="button" onclick="openModal('incomeModal')" class="bg-emerald-50 hover:bg-emerald-100 p-2 rounded-xl text-emerald-600 text-sm shadow-sm border border-emerald-100 cursor-pointer" title="الدخل">💰</button>
+      <button type="button" onclick="openModal('prayerModal')" class="bg-sky-50 hover:bg-sky-100 p-2 rounded-xl text-sky-600 text-sm shadow-sm border border-sky-100 cursor-pointer" title="الصلاة">🕌</button>
     </div>
     <div class="flex items-center gap-1.5">
       <h1 class="text-xl font-black text-amber-700 tracking-wider flex items-center gap-1">
@@ -27,10 +27,10 @@
     </div>
   </header>
 
-  <!-- شريط الفلترة والترتيب (نافذة منبثقة للترتيب) -->
+  <!-- شريط الفلترة والترتيب -->
   <div class="max-w-md mx-auto px-4 mt-3 flex justify-between items-center">
-    <span id="archive-link" onclick="openModal('archiveModal')" class="text-xs text-gray-500 cursor-pointer bg-white px-3 py-1.5 rounded-xl shadow-sm border">📁 الأرشيف (0)</span>
-    <button onclick="openModal('sortModal')" id="current-sort-btn" class="bg-white border text-xs px-3 py-1.5 rounded-xl shadow-sm text-gray-700 font-bold flex items-center gap-1">
+    <span id="archive-link" onclick="openModal('archiveModal')" class="text-xs text-gray-500 cursor-pointer bg-white px-3 py-1.5 rounded-xl shadow-sm border hover:bg-gray-50">📁 الأرشيف (0)</span>
+    <button type="button" onclick="openModal('sortModal')" id="current-sort-btn" class="bg-white border text-xs px-3 py-1.5 rounded-xl shadow-sm text-gray-700 font-bold flex items-center gap-1 cursor-pointer hover:bg-gray-50">
       ⚙️ <span id="sort-label-text">يدوي</span>
     </button>
   </div>
@@ -42,7 +42,7 @@
 
   <!-- زر الإضافة العائم -->
   <div class="fixed bottom-4 left-0 right-0 flex justify-center z-30 pointer-events-none">
-    <button onclick="openModal('addModal')" class="pointer-events-auto bg-amber-600 hover:bg-amber-700 text-white font-bold px-8 py-3 rounded-full shadow-lg text-base flex items-center gap-2 transition-transform active:scale-95">
+    <button type="button" onclick="openModal('addModal')" class="pointer-events-auto bg-amber-600 hover:bg-amber-700 text-white font-bold px-8 py-3 rounded-full shadow-lg text-base flex items-center gap-2 transition-transform active:scale-95 cursor-pointer">
       <span>+ مهمة</span>
     </button>
   </div>
@@ -52,12 +52,12 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="font-bold text-gray-800 text-lg">اختر طريقة الترتيب</h3>
-        <button onclick="closeModal('sortModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+        <button type="button" onclick="closeModal('sortModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold cursor-pointer">✕</button>
       </div>
       <div class="space-y-2">
-        <button onclick="setSortMode('manual', 'يدوي')" class="w-full text-right p-3 rounded-xl border hover:bg-amber-50 font-semibold text-sm flex items-center justify-between"><span>⚙️ ترتيب يدوي</span></button>
-        <button onclick="setSortMode('time', 'الوقت')" class="w-full text-right p-3 rounded-xl border hover:bg-amber-50 font-semibold text-sm flex items-center justify-between"><span>⏰ حسب التوقيت</span></button>
-        <button onclick="setSortMode('prio', 'الأولوية')" class="w-full text-right p-3 rounded-xl border hover:bg-amber-50 font-semibold text-sm flex items-center justify-between"><span>⭐ حسب الأولوية</span></button>
+        <button type="button" onclick="setSortMode('manual', 'يدوي')" class="w-full text-right p-3 rounded-xl border hover:bg-amber-50 font-semibold text-sm flex items-center justify-between cursor-pointer"><span>⚙️ ترتيب يدوي</span></button>
+        <button type="button" onclick="setSortMode('time', 'الوقت')" class="w-full text-right p-3 rounded-xl border hover:bg-amber-50 font-semibold text-sm flex items-center justify-between cursor-pointer"><span>⏰ حسب التوقيت</span></button>
+        <button type="button" onclick="setSortMode('prio', 'الأولوية')" class="w-full text-right p-3 rounded-xl border hover:bg-amber-50 font-semibold text-sm flex items-center justify-between cursor-pointer"><span>⭐ حسب الأولوية</span></button>
       </div>
     </div>
   </div>
@@ -67,7 +67,7 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="font-bold text-gray-800 text-lg">إضافة مهمة جديدة</h3>
-        <button onclick="closeModal('addModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+        <button type="button" onclick="closeModal('addModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold cursor-pointer">✕</button>
       </div>
       <div>
         <label class="block text-xs text-gray-500 mb-1">العنوان / الاسم</label>
@@ -77,7 +77,7 @@
         <label class="block text-xs text-gray-500 mb-1">رقم الهاتف</label>
         <div class="flex gap-2">
           <input type="tel" id="inp-phone" placeholder="05XXXXXXXX" class="w-full p-3 border rounded-xl bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
-          <button type="button" onclick="pickContact()" class="bg-gray-100 hover:bg-gray-200 px-3 rounded-xl border text-xs" title="من السجل">📇</button>
+          <button type="button" onclick="pickContact()" class="bg-gray-100 hover:bg-gray-200 px-3 rounded-xl border text-xs cursor-pointer" title="من السجل">📇</button>
         </div>
       </div>
       <div>
@@ -87,9 +87,9 @@
       <div>
         <label class="block text-xs text-gray-500 mb-1">الأولوية</label>
         <div class="grid grid-cols-3 gap-2">
-          <button type="button" onclick="setPriority('low')" id="prioLow" class="py-2 rounded-xl border text-sm font-semibold text-green-700 bg-green-50 border-green-200">منخفضة</button>
-          <button type="button" onclick="setPriority('med')" id="prioMed" class="py-2 rounded-xl border text-sm font-semibold text-white bg-amber-600">متوسطة</button>
-          <button type="button" onclick="setPriority('high')" id="prioHigh" class="py-2 rounded-xl border text-sm font-semibold text-red-700 bg-red-50 border-red-200">عالية</button>
+          <button type="button" onclick="setPriority('low')" id="prioLow" class="py-2 rounded-xl border text-sm font-semibold text-green-700 bg-green-50 border-green-200 cursor-pointer">منخفضة</button>
+          <button type="button" onclick="setPriority('med')" id="prioMed" class="py-2 rounded-xl border text-sm font-semibold text-white bg-amber-600 cursor-pointer">متوسطة</button>
+          <button type="button" onclick="setPriority('high')" id="prioHigh" class="py-2 rounded-xl border text-sm font-semibold text-red-700 bg-red-50 border-red-200 cursor-pointer">عالية</button>
         </div>
       </div>
       <div>
@@ -101,8 +101,8 @@
         <textarea id="inp-notes" placeholder="تفاصيل إضافية..." class="w-full p-3 border rounded-xl bg-gray-50 text-sm h-20 focus:outline-none"></textarea>
       </div>
       <div class="grid grid-cols-2 gap-3 pt-2">
-        <button onclick="closeModal('addModal')" class="bg-gray-100 text-gray-600 py-3 rounded-xl font-bold">إلغاء</button>
-        <button onclick="saveNewItem()" class="bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-xl font-bold shadow-md">حفظ</button>
+        <button type="button" onclick="closeModal('addModal')" class="bg-gray-100 text-gray-600 py-3 rounded-xl font-bold cursor-pointer">إلغاء</button>
+        <button type="button" onclick="saveNewItem()" class="bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-xl font-bold shadow-md cursor-pointer">حفظ</button>
       </div>
     </div>
   </div>
@@ -112,10 +112,10 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="font-bold text-amber-600 text-lg">المحفوظات 🌶️</h3>
-        <button onclick="closeModal('savedModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+        <button type="button" onclick="closeModal('savedModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold cursor-pointer">✕</button>
       </div>
       <div class="space-y-3" id="saved-items-container"></div>
-      <button onclick="closeModal('savedModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold">إغلاق</button>
+      <button type="button" onclick="closeModal('savedModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold cursor-pointer">إغلاق</button>
     </div>
   </div>
 
@@ -124,10 +124,10 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="font-bold text-gray-700 text-lg">الأرشيف (المنجزة) 📁</h3>
-        <button onclick="closeModal('archiveModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+        <button type="button" onclick="closeModal('archiveModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold cursor-pointer">✕</button>
       </div>
       <div class="space-y-3" id="archive-items-container"></div>
-      <button onclick="closeModal('archiveModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold">إغلاق</button>
+      <button type="button" onclick="closeModal('archiveModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold cursor-pointer">إغلاق</button>
     </div>
   </div>
 
@@ -136,7 +136,7 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="font-bold text-emerald-700 text-lg">الدخل والمصاريف 💰</h3>
-        <button onclick="closeModal('incomeModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+        <button type="button" onclick="closeModal('incomeModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold cursor-pointer">✕</button>
       </div>
       <div class="bg-emerald-50 p-4 rounded-2xl text-center space-y-1">
         <span class="text-xs text-gray-500 block">صافي الشهر</span>
@@ -162,9 +162,9 @@
             <option value="expense">مصروف (-)</option>
           </select>
         </div>
-        <button onclick="addFinancialRecord()" class="w-full bg-emerald-600 text-white py-2.5 rounded-xl font-bold text-xs">إضافة الحركة المالية</button>
+        <button type="button" onclick="addFinancialRecord()" class="w-full bg-emerald-600 text-white py-2.5 rounded-xl font-bold text-xs cursor-pointer">إضافة الحركة المالية</button>
       </div>
-      <button onclick="closeModal('incomeModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold">إغلاق</button>
+      <button type="button" onclick="closeModal('incomeModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold cursor-pointer">إغلاق</button>
     </div>
   </div>
 
@@ -173,7 +173,7 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="font-bold text-sky-700 text-lg">إحصائيات وتقويم الصلاة 🕌</h3>
-        <button onclick="closeModal('prayerModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+        <button type="button" onclick="closeModal('prayerModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold cursor-pointer">✕</button>
       </div>
       <div class="grid grid-cols-3 gap-2 text-center">
         <div class="bg-gray-50 p-3 rounded-xl border">
@@ -192,14 +192,14 @@
       <div class="space-y-2 border-t pt-3">
         <h4 class="font-bold text-xs text-gray-600">تسجيل صلاة اليوم</h4>
         <div class="grid grid-cols-5 gap-1 text-center">
-          <button onclick="logPrayer('الفجر')" class="p-2 border rounded-lg text-xs bg-sky-50 font-bold">الفجر</button>
-          <button onclick="logPrayer('الظهر')" class="p-2 border rounded-lg text-xs bg-sky-50 font-bold">الظهر</button>
-          <button onclick="logPrayer('العصر')" class="p-2 border rounded-lg text-xs bg-sky-50 font-bold">العصر</button>
-          <button onclick="logPrayer('المغرب')" class="p-2 border rounded-lg text-xs bg-sky-50 font-bold">المغرب</button>
-          <button onclick="logPrayer('العشاء')" class="p-2 border rounded-lg text-xs bg-sky-50 font-bold">العشاء</button>
+          <button type="button" onclick="logPrayer('الفجر')" class="p-2 border rounded-lg text-xs bg-sky-50 font-bold cursor-pointer">الفجر</button>
+          <button type="button" onclick="logPrayer('الظهر')" class="p-2 border rounded-lg text-xs bg-sky-50 font-bold cursor-pointer">الظهر</button>
+          <button type="button" onclick="logPrayer('العصر')" class="p-2 border rounded-lg text-xs bg-sky-50 font-bold cursor-pointer">العصر</button>
+          <button type="button" onclick="logPrayer('المغرب')" class="p-2 border rounded-lg text-xs bg-sky-50 font-bold cursor-pointer">المغرب</button>
+          <button type="button" onclick="logPrayer('العشاء')" class="p-2 border rounded-lg text-xs bg-sky-50 font-bold cursor-pointer">العشاء</button>
         </div>
       </div>
-      <button onclick="closeModal('prayerModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold">إغلاق</button>
+      <button type="button" onclick="closeModal('prayerModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold cursor-pointer">إغلاق</button>
     </div>
   </div>
 
@@ -208,11 +208,11 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="font-bold text-gray-800 text-lg">النسخ الاحتياطي 💾</h3>
-        <button onclick="closeModal('backupModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+        <button type="button" onclick="closeModal('backupModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold cursor-pointer">✕</button>
       </div>
       <div class="space-y-3">
-        <button onclick="localBackup()" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-xl font-bold shadow-sm">📥 حفظ محلي (ملف JSON)</button>
-        <button onclick="driveBackup()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold shadow-sm">☁️ مزامنة عبر Google Drive</button>
+        <button type="button" onclick="localBackup()" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-xl font-bold shadow-sm cursor-pointer">📥 حفظ محلي (ملف JSON)</button>
+        <button type="button" onclick="driveBackup()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold shadow-sm cursor-pointer">☁️ مزامنة عبر Google Drive</button>
         <label class="block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-center py-3 rounded-xl font-bold cursor-pointer">
           📤 استرجاع / رفع ملف
           <input type="file" onchange="restoreLocal(event)" class="hidden">
@@ -234,49 +234,54 @@
     let finances = JSON.parse(localStorage.getItem('hafedh_finances')) || [];
     let prayers = JSON.parse(localStorage.getItem('hafedh_prayers')) || [];
 
-    function openModal(id) { 
-      document.getElementById(id).classList.remove('hidden'); 
-      renderAllSubViews(); 
-    }
+    window.openModal = function(id) { 
+      const el = document.getElementById(id);
+      if(el) {
+        el.classList.remove('hidden'); 
+        renderAllSubViews(); 
+      }
+    };
     
-    function closeModal(id) { 
-      document.getElementById(id).classList.add('hidden'); 
-    }
+    window.closeModal = function(id) { 
+      const el = document.getElementById(id);
+      if(el) {
+        el.classList.add('hidden'); 
+      }
+    };
 
-    function setPriority(prio) {
+    window.setPriority = function(prio) {
       currentPriority = prio;
       ['Low', 'Med', 'High'].forEach(p => {
-        document.getElementById('prio' + p).className = "py-2 rounded-xl border text-sm font-semibold bg-white text-gray-600";
+        const btn = document.getElementById('prio' + p);
+        if(btn) btn.className = "py-2 rounded-xl border text-sm font-semibold bg-white text-gray-600 cursor-pointer";
       });
-      if(prio === 'low') document.getElementById('prioLow').className = "py-2 rounded-xl border text-sm font-semibold text-green-700 bg-green-50 border-green-200";
-      if(prio === 'med') document.getElementById('prioMed').className = "py-2 rounded-xl border text-sm font-semibold text-white bg-amber-600";
-      if(prio === 'high') document.getElementById('prioHigh').className = "py-2 rounded-xl border text-sm font-semibold text-red-700 bg-red-50 border-red-200";
-    }
+      if(prio === 'low') document.getElementById('prioLow').className = "py-2 rounded-xl border text-sm font-semibold text-green-700 bg-green-50 border-green-200 cursor-pointer";
+      if(prio === 'med') document.getElementById('prioMed').className = "py-2 rounded-xl border text-sm font-semibold text-white bg-amber-600 cursor-pointer";
+      if(prio === 'high') document.getElementById('prioHigh').className = "py-2 rounded-xl border text-sm font-semibold text-red-700 bg-red-50 border-red-200 cursor-pointer";
+    };
 
-    async function pickContact() {
+    window.pickContact = async function() {
       if ('contacts' in navigator && 'select' in navigator.contacts) {
         try {
-          const props = ['name', 'tel'];
-          const opts = { multiple: false };
-          const c = await navigator.contacts.select(props, opts);
+          const c = await navigator.contacts.select(['name', 'tel'], { multiple: false });
           if (c.length) {
             if(c[0].tel) document.getElementById('inp-phone').value = c[0].tel[0];
             if(c[0].name && !document.getElementById('inp-name').value) document.getElementById('inp-name').value = c[0].name[0];
           }
         } catch (ex) { alert('تعذر الوصول لجهات الاتصال'); }
       } else {
-        alert('خاصية اختيار جهات الاتصال غير مدعومة في هذا المتصفح، يمكنك إدخال الرقم يدوياً.');
+        alert('خاصية اختيار جهات الاتصال غير مدعومة في متصفحك.');
       }
-    }
+    };
 
-    function saveNewItem() {
+    window.saveNewItem = function() {
       const name = document.getElementById('inp-name').value;
       const phone = document.getElementById('inp-phone').value;
       const amount = document.getElementById('inp-amount').value;
       const date = document.getElementById('inp-date').value;
       const notes = document.getElementById('inp-notes').value;
 
-      if(name) {
+      if(name.trim() !== '') {
         items.unshift({ id: Date.now(), name, phone, amount, priority: currentPriority, date, notes, status: 'active' });
         saveAndRender();
         closeModal('addModal');
@@ -288,7 +293,7 @@
       } else {
         alert('الرجاء إدخال اسم المهمة');
       }
-    }
+    };
 
     function saveAndRender() {
       localStorage.setItem('hafedh_items', JSON.stringify(items));
@@ -301,22 +306,10 @@
 
     function renderItems() {
       const container = document.getElementById('items-container');
-      document.getElementById('archive-link').innerText = `📁 الأرشيف (${archive.length})`;
+      const archiveLink = document.getElementById('archive-link');
+      if(archiveLink) archiveLink.innerText = `📁 الأرشيف (${archive.length})`;
+
+      if(!container) return;
 
       container.innerHTML = items.length ? items.map((item, index) => {
-        let borderColor = item.priority === 'high' ? 'border-r-red-500' : (item.priority === 'low' ? 'border-r-green-500' : 'border-r-blue-500');
-        let dotColor = item.priority === 'high' ? 'bg-red-500' : (item.priority === 'low' ? 'bg-green-500' : 'bg-blue-500');
-
-        return `
-          <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-200 relative overflow-hidden border-r-8 ${borderColor} flex items-center justify-between">
-            <div class="space-y-1">
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full ${dotColor}"></span>
-                <h3 class="font-bold text-gray-800 text-base">${item.name}</h3>
-                <span class="text-xs text-gray-400 font-semibold">${index + 1}</span>
-              </div>
-              ${item.phone ? `<a href="tel:${item.phone}" class="text-xs text-gray-500 flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg w-fit border">📞 ${item.phone}</a>` : ''}
-              ${item.notes ? `<p class="text-xs text-gray-400">${item.notes}</p>` : ''}
-            </div>
-            <div class="flex items-center gap-2">
-              ${item.phone ? `<a href="tel:${item.phone}" class="bg-gray-100 p-2 roun
+        let borderColor = item.priority === 'hi
