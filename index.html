@@ -15,7 +15,23 @@
     <h1 class="text-xl font-bold">حافظ</h1>
   </header>
 
-  <main class="p-4 max-w-md mx-auto space-y-6">
+  <!-- شريط الإحصائيات السريعة -->
+  <div class="max-w-md mx-auto p-4 grid grid-cols-3 gap-2 text-center">
+    <div class="bg-white p-2 rounded-lg shadow-sm border border-indigo-100">
+      <span class="block text-xs text-gray-500">المواعيد</span>
+      <span id="stat-events" class="font-bold text-indigo-600 text-lg">0</span>
+    </div>
+    <div class="bg-white p-2 rounded-lg shadow-sm border border-green-100">
+      <span class="block text-xs text-gray-500">المصاريف</span>
+      <span id="stat-expenses" class="font-bold text-green-600 text-lg">0</span>
+    </div>
+    <div class="bg-white p-2 rounded-lg shadow-sm border border-amber-100">
+      <span class="block text-xs text-gray-500">الروتين</span>
+      <span id="stat-habits" class="font-bold text-amber-600 text-lg">0</span>
+    </div>
+  </div>
+
+  <main class="p-4 max-w-md mx-auto space-y-6 pt-0">
 
     <!-- قسم التقويم والمواعيد -->
     <section id="tab-calendar" class="tab-content bg-white p-5 rounded-xl shadow-md space-y-3">
@@ -62,7 +78,8 @@
   <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-3 text-xs font-bold text-gray-700 shadow-lg z-50">
     <button onclick="switchTab('calendar')" id="btn-calendar" class="flex flex-col items-center text-indigo-600 transition">
       <span class="text-xl mb-1">📅</span>التقويم
-    </button><button onclick="switchTab('expenses')" id="btn-expenses" class="flex flex-col items-center text-gray-400 hover:text-gray-700 transition">
+    </button>
+    <button onclick="switchTab('expenses')" id="btn-expenses" class="flex flex-col items-center text-gray-400 hover:text-gray-700 transition">
       <span class="text-xl mb-1">💰</span>المصاريف
     </button>
     <button onclick="switchTab('habits')" id="btn-habits" class="flex flex-col items-center text-gray-400 hover:text-gray-700 transition">
@@ -97,7 +114,14 @@
     let expenses = JSON.parse(localStorage.getItem('my_expenses')) || [];
     let habits = JSON.parse(localStorage.getItem('my_habits')) || [];
 
+    function updateStats() {
+      document.getElementById('stat-events').innerText = events.length;
+      document.getElementById('stat-expenses').innerText = expenses.length;
+      document.getElementById('stat-habits').innerText = habits.length;
+    }
+
     function renderAll() {
+      updateStats();
       const evlist = document.getElementById('events-list');
       if (evlist) {
         evlist.innerHTML = events.length ? events.map((e, index) => `<li class="py-3 flex justify-between items-center"><div><span class="font-bold block">${e.title}</span><span class="text-xs text-gray-500">${e.date}</span></div><button onclick="deleteEvent(${index})" class="text-red-500 text-xs px-2 py-1 border border-red-200 rounded">حذف</button></li>`).join('') : '<p class="text-gray-400 text-center py-2 text-xs">لا توجد مواعيد مضافة</p>';
@@ -151,8 +175,8 @@
     }
 
     function deleteEvent(i) { events.splice(i, 1); localStorage.setItem('my_events', JSON.stringify(events)); renderAll(); }
-    function deleteExpense(i) { expenses.splice(i, 1); localStorage.setItem('my_expenses', JSON.stringify(expenses)); renderAll(); }
-    function deleteHabit(i) { habits.splice(i, 1); localStorage.setItem('my_habits', JSON.stringify(habits)); renderAll(); }
+    function deleteExpense(i)  { expenses.splice(i, 1); localStorage.setItem('my_expenses', JSON.stringify(expenses)); renderAll(); }
+    function deleteHabit(i)  { habits.splice(i, 1); localStorage.setItem('my_habits', JSON.stringify(habits)); renderAll(); }
 
     renderAll();
 
@@ -180,4 +204,4 @@
   </script>
 </body>
         </html>
-      
+        
