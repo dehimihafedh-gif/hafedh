@@ -1,207 +1,295 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>حافظ - منظمي الشخصي</title>
+  <title>حافظ - v7</title>
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/calendar--v1.png">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #f3f4f6; font-family: system-ui, -apple-system, sans-serif; }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans text-gray-800 pb-24">
+<body class="pb-28">
 
-  <header class="bg-indigo-600 text-white p-4 text-center sticky top-0 z-50 shadow-md flex items-center justify-center space-x-2 space-x-reverse">
-    <span class="text-2xl">📖</span>
-    <h1 class="text-xl font-bold">حافظ</h1>
+  <!-- الهيدر العلوي -->
+  <header class="bg-white shadow-sm p-3 sticky top-0 z-40 flex items-center justify-between border-b">
+    <div class="flex items-center gap-1.5 flex-wrap">
+      <button onclick="openModal('backupModal')" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-xl text-gray-700 text-xs flex items-center gap-1 shadow-sm">💾</button>
+      <button onclick="openModal('savedModal')" class="bg-red-50 hover:bg-red-100 text-red-600 px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 border border-red-100">🌶️ المحفوظات</button>
+      <button onclick="openModal('incomeModal')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 border border-amber-100">💰 الدخل</button>
+      <button onclick="openModal('prayerModal')" class="bg-amber-50 hover:bg-amber-100 text-amber-800 px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 border border-amber-100">🕌 الصلاة</button>
+    </div>
+    <div class="flex flex-col items-end">
+      <div class="flex items-center gap-1">
+        <span class="text-amber-500 text-lg">⚡</span>
+        <h1 class="text-xl font-black text-amber-700 tracking-wider">حافظ</h1>
+      </div>
+      <span class="text-[10px] text-gray-400 font-semibold px-1.5 bg-gray-100 rounded-md">v7</span>
+    </div>
   </header>
 
-  <!-- شريط الإحصائيات السريعة -->
-  <div class="max-w-md mx-auto p-4 grid grid-cols-3 gap-2 text-center">
-    <div class="bg-white p-2 rounded-lg shadow-sm border border-indigo-100">
-      <span class="block text-xs text-gray-500">المواعيد</span>
-      <span id="stat-events" class="font-bold text-indigo-600 text-lg">0</span>
-    </div>
-    <div class="bg-white p-2 rounded-lg shadow-sm border border-green-100">
-      <span class="block text-xs text-gray-500">المصاريف</span>
-      <span id="stat-expenses" class="font-bold text-green-600 text-lg">0</span>
-    </div>
-    <div class="bg-white p-2 rounded-lg shadow-sm border border-amber-100">
-      <span class="block text-xs text-gray-500">الروتين</span>
-      <span id="stat-habits" class="font-bold text-amber-600 text-lg">0</span>
+  <!-- زر الفلترة -->
+  <div class="max-w-md mx-auto px-4 mt-3 flex justify-end">
+    <button class="bg-white border text-xs px-3 py-1.5 rounded-xl shadow-sm text-gray-600 flex items-center gap-1">
+      <span>⚙️</span> يدوي ▾
+    </button>
+  </div>
+
+  <!-- قائمة العناصر الرئيسية -->
+  <main class="p-4 max-w-md mx-auto space-y-4" id="items-container">
+    <!-- سيتم تعبئتها ديناميكياً -->
+  </main>
+
+  <!-- زر الإضافة العائم -->
+  <div class="fixed bottom-4 left-0 right-0 flex flex-col items-center z-30 pointer-events-none">
+    <a href="#" class="text-xs text-gray-500 mb-1 pointer-events-auto bg-white/80 px-3 py-0.5 rounded-full shadow-sm">📁 الأرشيف (4)</a>
+    <button onclick="openModal('addModal')" class="pointer-events-auto bg-amber-600 hover:bg-amber-700 text-white font-bold px-8 py-3 rounded-full shadow-lg text-base flex items-center gap-2 transition-transform active:scale-95">
+      <span>+ إضافة</span>
+    </button>
+  </div>
+
+  <!-- ================= نافذة الإضافة ================= -->
+  <div id="addModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-wite bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-gray-800 text-lg">إضافة عنصر جديد</h3>
+        <button onclick="closeModal('addModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">النوع</label>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" onclick="setFormType('person')" id="typePersonBtn" class="py-2 rounded-xl border font-bold bg-amber-600 text-white shadow-sm">شخص</button>
+          <button type="button" onclick="setFormType('task')" id="typeTaskBtn" class="py-2 rounded-xl border font-bold bg-white text-gray-600">مهمة</button>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">الاسم</label>
+        <input type="text" id="inp-name" placeholder="أدخل الاسم أو العنوان" class="w-full p-3 border rounded-xl bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+      </div>
+
+      <div id="phoneFieldContainer">
+        <label class="block text-xs text-gray-500 mb-1">رقم الهاتف</label>
+        <input type="tel" id="inp-phone" placeholder="05XXXXXXXX" class="w-full p-3 border rounded-xl bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">المدخول من هذه المهمة (اختياري)</label>
+        <input type="number" id="inp-amount" value="0" class="w-full p-3 border rounded-xl bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">الأولوية</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button type="button" onclick="setPriority('low')" id="prioLow" class="py-2 rounded-xl border text-sm font-semibold text-green-700 bg-green-50 border-green-200">منخفضة</button>
+          <button type="button" onclick="setPriority('med')" id="prioMed" class="py-2 rounded-xl border text-sm font-semibold text-white bg-amber-600">متوسطة</button>
+          <button type="button" onclick="setPriority('high')" id="prioHigh" class="py-2 rounded-xl border text-sm font-semibold text-red-700 bg-red-50 border-red-200">عالية</button>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">ملاحظات (اختياري)</label>
+        <textarea id="inp-notes" placeholder="أي تفاصيل إضافية..." class="w-full p-3 border rounded-xl bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 h-20"></textarea>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 pt-2">
+        <button onclick="closeModal('addModal')" class="bg-gray-100 text-gray-600 py-3 rounded-xl font-bold">إلغاء</button>
+        <button onclick="saveNewItem()" class="bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-xl font-bold shadow-md">حفظ</button>
+      </div>
     </div>
   </div>
 
-  <main class="p-4 max-w-md mx-auto space-y-6 pt-0">
-
-    <!-- قسم التقويم والمواعيد -->
-    <section id="tab-calendar" class="tab-content bg-white p-5 rounded-xl shadow-md space-y-3">
-      <h2 class="text-lg font-bold mb-2 text-indigo-600 flex items-center gap-2"><span>📅</span> التقويم والمواعيد</h2>
-      <input type="text" id="event-title" placeholder="عنوان الموعد" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-      <input type="date" id="event-date" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-      <button onclick="addEvent()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition">إضافة موعد</button>
-      <ul id="events-list" class="mt-4 divide-y"></ul>
-    </section>
-
-    <!-- قسم المصاريف -->
-    <section id="tab-expenses" class="tab-content hidden bg-white p-5 rounded-xl shadow-md space-y-3">
-      <h2 class="text-lg font-bold mb-2 text-green-600 flex items-center gap-2"><span>💰</span> المصاريف</h2>
-      <input type="number" id="exp-amount" placeholder="المبلغ (دج)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-      <input type="text" id="exp-desc" placeholder="الوصف (مثلاً: شراء غرض)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-      <button onclick="addExpense()" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition">إضافة مصروف</button>
-      <div class="mt-3 p-3 bg-green-50 rounded-lg flex justify-between items-center font-bold text-green-800">
-        <span>إجمالي المصاريف:</span>
-        <span id="total-exp">0</span> دج
+  <!-- ================= نافذة الدخل والمصاريف ================= -->
+  <div id="incomeModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b pb-2">
+        <div class="flex gap-2">
+          <button class="p-1 border rounded-lg bg-gray-50">📊</button>
+          <button class="p-1 border rounded-lg bg-gray-50">🏷️</button>
+        </div>
+        <h3 class="font-bold text-amber-700 text-lg">الدخل</h3>
+        <button onclick="closeModal('incomeModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
       </div>
-      <ul id="expenses-list" class="mt-4 divide-y"></ul>
-    </section>
+      <div class="text-center text-sm font-bold text-gray-600">سبتمبر 2026</div>
+      <div class="bg-gray-50 p-4 rounded-2xl text-center space-y-1">
+        <span class="text-xs text-gray-500 block">صافي الشهر</span>
+        <span class="text-2xl font-black text-green-600">420</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-white border p-3 rounded-xl text-center shadow-sm">
+          <span class="text-xs text-gray-400 block">مجموع المصاريف</span>
+          <span class="font-bold text-red-500 text-lg">500</span>
+        </div>
+        <div class="bg-white border p-3 rounded-xl text-center shadow-sm">
+          <span class="text-xs text-gray-400 block">مجموع المداخيل</span>
+          <span class="font-bold text-green-600 text-lg">920</span>
+        </div>
+      </div>
+      <button onclick="closeModal('incomeModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold">إغلاق</button>
+    </div>
+  </div>
 
-    <!-- قسم الروتين اليومي -->
-    <section id="tab-habits" class="tab-content hidden bg-white p-5 rounded-xl shadow-md space-y-3">
-      <h2 class="text-lg font-bold mb-2 text-amber-600 flex items-center gap-2"><span>✅</span> الروتين اليومي</h2>
-      <input type="text" id="habit-title" placeholder="اسم العادة أو الروتين" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
-      <button onclick="addHabit()" class="w-full bg-amber-600 text-white py-3 rounded-lg font-bold hover:bg-amber-700 transition">إضافة عادة</button>
-      <ul id="habits-list" class="mt-4 divide-y"></ul>
-    </section>
+  <!-- ================= نافذة الصلاة ================= -->
+  <div id="prayerModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b pb-2">
+        <button class="p-1 border rounded-lg bg-gray-50">📊</button>
+        <h3 class="font-bold text-amber-800 text-lg">إحصائيات الصلاة 🕌</h3>
+        <button onclick="closeModal('prayerModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="bg-gray-50 p-3 rounded-xl border">
+          <span class="text-lg font-bold">2</span>
+          <span class="block text-[10px] text-gray-400">⚪ فائتة</span>
+        </div>
+        <div class="bg-gray-50 p-3 rounded-xl border">
+          <span class="text-lg font-bold text-red-500">0</span>
+          <span class="block text-[10px] text-gray-400">🔴 لم تصلى</span>
+        </div>
+        <div class="bg-gray-50 p-3 rounded-xl border">
+          <span class="text-lg font-bold text-green-600">3</span>
+          <span class="block text-[10px] text-gray-400">🟢 في وقتها</span>
+        </div>
+      </div>
+      <button onclick="closeModal('prayerModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold">إغلاق</button>
+    </div>
+  </div>
 
-    <!-- قسم السحاب -->
-    <section id="tab-settings" class="tab-content hidden bg-white p-5 rounded-xl shadow-md space-y-3">
-      <h2 class="text-lg font-bold mb-2 text-blue-600 flex items-center gap-2"><span>⚙️</span> السحاب والنسخ الاحتياطي</h2>
-      <button onclick="handleGoogleLogin()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition">تسجيل الدخول بـ Google</button>
-      <button onclick="backupData()" class="w-full bg-emerald-600 text-white py-3 rounded-lg font-bold hover:bg-emerald-700 transition">رفع نسخة احتياطية إلى Drive</button>
-      <button onclick="restoreData()" class="w-full bg-gray-600 text-white py-3 rounded-lg font-bold hover:bg-gray-700 transition">استرجاع البيانات من Drive</button>
-      <p id="sync-status" class="text-xs text-center text-gray-500 mt-3"></p>
-    </section>
+  <!-- ================= نافذة المحفوظات ================= -->
+  <div id="savedModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-red-600 text-lg">المحفوظات 🌶️</h3>
+        <button onclick="closeModal('savedModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+      </div>
+      <div class="space-y-3">
+        <div class="border rounded-2xl p-3 shadow-sm bg-blue-50/50 border-l-4 border-l-blue-500 flex justify-between items-center">
+          <div>
+            <span class="font-bold text-sm block">وليد سحة</span>
+            <span class="text-xs text-green-700 font-semibold">له عندك 1000</span>
+          </div>
+          <button class="text-xs bg-white border px-2.5 py-1 rounded-lg shadow-sm"> استعادة ↩️</button>
+        </div>
+      </div>
+      <button onclick="closeModal('savedModal')" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold">إغلاق</button>
+    </div>
+  </div>
 
-  </main>
-
-  <!-- شريط التنقل السفلي -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-3 text-xs font-bold text-gray-700 shadow-lg z-50">
-    <button onclick="switchTab('calendar')" id="btn-calendar" class="flex flex-col items-center text-indigo-600 transition">
-      <span class="text-xl mb-1">📅</span>التقويم
-    </button>
-    <button onclick="switchTab('expenses')" id="btn-expenses" class="flex flex-col items-center text-gray-400 hover:text-gray-700 transition">
-      <span class="text-xl mb-1">💰</span>المصاريف
-    </button>
-    <button onclick="switchTab('habits')" id="btn-habits" class="flex flex-col items-center text-gray-400 hover:text-gray-700 transition">
-      <span class="text-xl mb-1">✅</span>الروتين
-    </button>
-    <button onclick="switchTab('settings')" id="btn-settings" class="flex flex-col items-center text-gray-400 hover:text-gray-700 transition">
-      <span class="text-xl mb-1">⚙️</span>السحاب
-    </button>
-  </nav>
+  <!-- ================= نافذة النسخ الاحتياطي ================= -->
+  <div id="backupModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-gray-800 text-lg">نسخة احتياطية 💾</h3>
+        <button onclick="closeModal('backupModal')" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+      </div>
+      <p class="text-xs text-gray-500 leading-relaxed">نزّل نسخة من كل بياناتك (المهام، الأشخاص، تقويم الدخل) كملف واحد تحتفظ به.</p>
+      <button class="w-full bg-amber-600 text-white py-3 rounded-xl font-bold shadow-sm">📥 تنزيل نسخة احتياطية</button>
+      <button class="w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-bold">📤 استيراد من ملف</button>
+    </div>
+  </div>
 
   <script>
-    const CLIENT_ID = '358736924266-9vhit2t5filvuchg2h3u19pmb95brn59.apps.googleusercontent.com';
+    let currentType = 'person';
+    let currentPriority = 'med';
 
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      ['calendar', 'expenses', 'habits', 'settings'].forEach(t => {
-        const btn = document.getElementById(`btn-${t}`);
-        if(btn) {
-          btn.className = "flex flex-col items-center text-gray-400 hover:text-gray-700 transition";
-        }
+    let items = JSON.parse(localStorage.getItem('hafedh_items')) || [
+      { id: 1, type: 'person', name: 'كراء الشرقية', phone: '', amount: '1000', priority: 'low', notes: '' },
+      { id: 2, type: 'task', name: 'كارت الشفاء.عائلية', phone: '', amount: '0', priority: 'high', notes: '' },
+      { id: 3, type: 'person', name: 'بلقاسم غيوط', phone: '213675933981+', amount: '0', priority: 'med', notes: '' }
+    ];
+
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    function setFormType(type) {
+      currentType = type;
+      const pBtn = document.getElementById('typePersonBtn');
+      const tBtn = document.getElementById('typeTaskBtn');
+      const phoneContainer = document.getElementById('phoneFieldContainer');
+
+      if(type === 'person') {
+        pBtn.className = "py-2 rounded-xl border font-bold bg-amber-600 text-white shadow-sm";
+        tBtn.className = "py-2 rounded-xl border font-bold bg-white text-gray-600";
+        phoneContainer.style.display = 'block';
+      } else {
+        tBtn.className = "py-2 rounded-xl border font-bold bg-amber-600 text-white shadow-sm";
+        pBtn.className = "py-2 rounded-xl border font-bold bg-white text-gray-600";
+        phoneContainer.style.display = 'none';
+      }
+    }
+
+    function setPriority(prio) {
+      currentPriority = prio;
+      ['Low', 'Med', 'High'].forEach(p => {
+        const btn = document.getElementById('prio' + p);
+        btn.className = "py-2 rounded-xl border text-sm font-semibold bg-white text-gray-600";
       });
+      if(prio === 'low') document.getElementById('prioLow').className = "py-2 rounded-xl border text-sm font-semibold text-green-700 bg-green-50 border-green-200";
+      if(prio === 'med') document.getElementById('prioMed').className = "py-2 rounded-xl border text-sm font-semibold text-white bg-amber-600";
+      if(prio === 'high') document.getElementById('prioHigh').className = "py-2 rounded-xl border text-sm font-semibold text-red-700 bg-red-50 border-red-200";
+    }
 
-      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-      const activeBtn = document.getElementById(`btn-${tabName}`);
-      if (activeBtn) {
-        const colors = { calendar: 'text-indigo-600', expenses: 'text-green-600', habits: 'text-amber-600', settings: 'text-blue-600' };
-        activeBtn.className = `flex flex-col items-center ${colors[tabName]} transition`;
+    function renderItems() {
+      const container = document.getElementById('items-container');
+      container.innerHTML = items.map((item, index) => {
+        let borderColor = item.priority === 'high' ? 'border-r-red-500' : (item.priority === 'low' ? 'border-r-green-500' : 'border-r-blue-500');
+        let dotColor = item.priority === 'high' ? 'bg-red-500' : (item.priority === 'low' ? 'bg-green-500' : 'bg-blue-500');
+
+        return `
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-200 relative overflow-hidden border-r-8 ${borderColor} flex items-center justify-between">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full ${dotColor}"></span>
+                <h3 class="font-bold text-gray-800 text-base">${item.name}</h3>
+                <span class="text-xs text-gray-400 font-semibold">${index + 1}</span>
+              </div>
+              ${item.phone ? `<a href="tel:${item.phone}" class="text-xs text-gray-500 flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg w-fit border">📞 ${item.phone}</a>` : ''}
+            </div>
+
+            <div class="flex items-center gap-2">
+              ${item.phone ? `<a href="tel:${item.phone}" class="bg-gray-100 p-2 rounded-full text-gray-600 shadow-sm">📞</a>` : ''}
+              <button onclick="toggleCheck(this)" class="bg-green-50 text-green-600 p-2 rounded-full border border-green-200 shadow-sm">✓</button>
+              <button onclick="deleteItem(${index})" class="bg-red-50 text-red-500 p-2 rounded-full border border-red-200 shadow-sm">🌶️</button>
+              <button class="bg-gray-50 text-gray-600 p-2 rounded-full border shadow-sm">≡</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function saveNewItem() {
+      const name = document.getElementById('inp-name').value;
+      const phone = document.getElementById('inp-phone').value;
+      const amount = document.getElementById('inp-amount').value;
+      const notes = document.getElementById('inp-notes').value;
+
+      if(name) {
+        items.unshift({ id: Date.now(), type: currentType, name, phone, amount, priority: currentPriority, notes });
+        localStorage.setItem('hafedh_items', JSON.stringify(items));
+        renderItems();
+        closeModal('addModal');
+        document.getElementById('inp-name').value = '';
+        document.getElementById('inp-phone').value = '';
+        document.getElementById('inp-amount').value = '0';
+        document.getElementById('inp-notes').value = '';
       }
     }
 
-    let events = JSON.parse(localStorage.getItem('my_events')) || [];
-    let expenses = JSON.parse(localStorage.getItem('my_expenses')) || [];
-    let habits = JSON.parse(localStorage.getItem('my_habits')) || [];
-
-    function updateStats() {
-      document.getElementById('stat-events').innerText = events.length;
-      document.getElementById('stat-expenses').innerText = expenses.length;
-      document.getElementById('stat-habits').innerText = habits.length;
+    function deleteItem(index) {
+      items.splice(index, 1);
+      localStorage.setItem('hafedh_items', JSON.stringify(items));
+      renderItems();
     }
 
-    function renderAll() {
-      updateStats();
-      const evlist = document.getElementById('events-list');
-      if (evlist) {
-        evlist.innerHTML = events.length ? events.map((e, index) => `<li class="py-3 flex justify-between items-center"><div><span class="font-bold block">${e.title}</span><span class="text-xs text-gray-500">${e.date}</span></div><button onclick="deleteEvent(${index})" class="text-red-500 text-xs px-2 py-1 border border-red-200 rounded">حذف</button></li>`).join('') : '<p class="text-gray-400 text-center py-2 text-xs">لا توجد مواعيد مضافة</p>';
-      }
-
-      const exlist = document.getElementById('expenses-list');
-      if (exlist) {
-        exlist.innerHTML = expenses.length ? expenses.map((ex, index) => `<li class="py-3 flex justify-between items-center"><div><span class="block">${ex.desc}</span><span class="font-bold text-green-600">${ex.amount} دج</span></div><button onclick="deleteExpense(${index})" class="text-red-500 text-xs px-2 py-1 border border-red-200 rounded">حذف</button></li>`).join('') : '<p class="text-gray-400 text-center py-2 text-xs">لا توجد مصاريف مسجلة</p>';
-        const total = expenses.reduce((sum, item) => sum + Number(item.amount), 0);
-        document.getElementById('total-exp').innerText = total;
-      }
-
-      const hbList = document.getElementById('habits-list');
-      if (hbList) {
-        hbList.innerHTML = habits.length ? habits.map((h, index) => `<li class="py-3 flex justify-between items-center"><span class="font-medium">${h.title}</span><button onclick="deleteHabit(${index})" class="text-red-500 text-xs px-2 py-1 border border-red-200 rounded">حذف</button></li>`).join('') : '<p class="text-gray-400 text-center py-2 text-xs">لا توجد عادات مسجلة</p>';
-      }
+    function toggleCheck(btn) {
+      btn.classList.toggle('bg-green-600');
+      btn.classList.toggle('text-white');
     }
 
-    function addEvent() {
-      const title = document.getElementById('event-title').value;
-      const date = document.getElementById('event-date').value;
-      if (title && date) {
-        events.push({ title, date });
-        localStorage.setItem('my_events', JSON.stringify(events));
-        renderAll();
-        document.getElementById('event-title').value = '';
-        document.getElementById('event-date').value = '';
-      }
-    }
-
-    function addExpense() {
-      const amount = document.getElementById('exp-amount').value;
-      const desc = document.getElementById('exp-desc').value;
-      if (amount && desc) {
-        expenses.push({ amount, desc });
-        localStorage.setItem('my_expenses', JSON.stringify(expenses));
-        renderAll();
-        document.getElementById('exp-amount').value = '';
-        document.getElementById('exp-desc').value = '';
-      }
-    }
-
-    function addHabit() {
-      const title = document.getElementById('habit-title').value;
-      if (title) {
-        habits.push({ title });
-        localStorage.setItem('my_habits', JSON.stringify(habits));
-        renderAll();
-        document.getElementById('habit-title').value = '';
-      }
-    }
-
-    function deleteEvent(i) { events.splice(i, 1); localStorage.setItem('my_events', JSON.stringify(events)); renderAll(); }
-    function deleteExpense(i)  { expenses.splice(i, 1); localStorage.setItem('my_expenses', JSON.stringify(expenses)); renderAll(); }
-    function deleteHabit(i)  { habits.splice(i, 1); localStorage.setItem('my_habits', JSON.stringify(habits)); renderAll(); }
-
-    renderAll();
-
-    function handleGoogleLogin() {
-      const client = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: 'https://www.googleapis.com/auth/drive.file',
-        callback: (tokenResponse) => {
-          if (tokenResponse.access_token) {
-            localStorage.setItem('gdrive_token', tokenResponse.access_token);
-            document.getElementById('sync-status').innerText = 'تم تسجيل الدخول بنجاح!';
-          }
-        }
-      });
-      client.requestAccessToken();
-    }
-
-    function backupData() {
-      document.getElementById('sync-status').innerText = 'جاري الرفع إلى السحاب...';
-    }
-
-    function restoreData() {
-      document.getElementById('sync-status').innerText = 'جاري استرجاع البيانات...';
-    }
+    renderItems();
   </script>
 </body>
         </html>
-        
+          
